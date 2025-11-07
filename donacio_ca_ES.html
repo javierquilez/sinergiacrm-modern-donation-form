@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Formulari de Donació</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #fff; color: #333; }
+    .form-container { max-width: 600px; margin: 2rem auto; padding: 2rem; border: 1px solid #ccc; border-radius: 8px; }
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    h2 { color: #c21630; }
+    label { display: block; margin: 0.5rem 0 0.25rem; font-weight: bold; }
+    input, select { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+    .selector-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    .selector-group button { flex: 1; padding: 0.5rem; border: 1px solid #c21630; background: white; color: #c21630; border-radius: 4px; cursor: pointer; }
+    .selector-group button.active { background-color: #c21630; color: white; }
+    .buttons { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+    .btn { background-color: #c21630; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+    .btn:disabled { background-color: #ccc; }
+    /* Estilo para campos con error */
+    .field-error { border-color: #c21630; background-color: #fff8f8; }
+    .btn.secondary { background-color: #fff; color: #c21630; border: 1px solid #c21630;}
+    .btn.primary-action { padding: 0.75rem 1.25rem; /* Un poco más grande */  font-size: 1.1rem;  font-weight: bold;}
+  </style>
+</head>
+<body>
+<div class="form-container">
+<form id="donationForm">
+<div class="form-step active" id="step-1">
+<h2>Vull ajudar amb la meva aportació</h2>
+<label>Tipus d'aportació</label>
+<div class="selector-group">
+<button class="active" data-type="donativo" onclick="selectDonationType(this)" type="button">Puntual</button>
+<button data-type="cuota" onclick="selectDonationType(this)" type="button">Periòdica</button>
+</div>
+<div id="periodicitySelector" style="display:none;">
+<label>Periodicitat</label>
+<select id="periodicitySelect" onchange="updatePeriodicity(this)">
+<option value="monthly">Mensual</option>
+<option value="quarterly">Trimestral</option>
+<option value="annual">Anual</option>
+</select>
+</div>
+<label>Import</label>
+<div class="selector-group" id="amount-buttons">
+<button onclick="selectAmount(this, 25)" type="button">25€</button>
+<button onclick="selectAmount(this, 50)" type="button">50€</button>
+<button onclick="selectAmount(this, 100)" type="button">100€</button>
+<input id="customAmount" min="1" oninput="customAmountChanged(this)" placeholder="Otra cantidad" type="number"/>
+</div>
+<div id="deductionInfo" style="text-align:center; margin-top:1rem;">
+<p id="deductionText" style="color:green; font-weight:bold; font-size:1rem;">ℹ Desgrava fins a 0 € a l'any</p>
+<a href="#" onclick="openDeductionModal(); return false;" style="display:block;text-align:center;font-size:0.9rem;margin-top:0.5rem;color:#2a7ae2;">ℹ Més informació sobre la desgravació</a>
+</div>
+<label>Tipus de persona</label>
+<div class="selector-group">
+<button class="active" data-person="persona" onclick="selectPersonType(this)" type="button">Persona física</button>
+<button data-person="organizacion" onclick="selectPersonType(this)" type="button">Empresa</button>
+</div>
+<div class="buttons">
+<span></span>
+<button class="btn" onclick="nextStep()" type="button">Següent</button>
+</div>
+</div>
+<div class="form-step" id="step-2">
+<h2>Les teves dades</h2>
+<div id="fields-persona">
+<label for="Contacts___first_name">Nom</label>
+<input id="Contacts___first_name" type="text"/>
+<label for="Contacts___last_name">Cognoms</label>
+<input id="Contacts___last_name" type="text"/>
+<label for="Contacts___email1">Correu electrònic</label>
+<input id="Contacts___email1" type="email" onchange="validateEmailField(this)"/>
+<label for="Contacts___stic_identification_type_c">Tipus de document</label>
+<select id="Contacts___stic_identification_type_c" onchange="validateIdentificationField(document.getElementById('Contacts___stic_identification_number_c'))">
+<option label="" value=""></option>
+<option label="NIE" value="nie">NIE</option>
+<option label="NIF" value="nif">NIF</option>
+<option label="Pasaporte" value="passport">Pasaporte</option>
+<option label="Otros" value="other">Otros</option>
+</select>
+<label for="Contacts___stic_identification_number_c">Núm. de document</label>
+<input id="Contacts___stic_identification_number_c" type="text" onchange="validateIdentificationField(this)"/>
+<label for="Contacts___primary_address_state">Província</label>
+<select id="Contacts___primary_address_state" name="Contacts___primary_address_state">
+<option label="" value=""></option>
+<option label="Albacete" value="02">Albacete</option>
+<option label="Alicante/Alacant" value="03">Alicante/Alacant</option>
+<option label="Almería" value="04">Almería</option>
+<option label="Araba/Álava" value="01">Araba/Álava</option>
+<option label="Asturias" value="33">Asturias</option>
+<option label="Ávila" value="05">Ávila</option>
+<option label="Badajoz" value="06">Badajoz</option>
+<option label="Balears, Illes" value="07">Balears, Illes</option>
+<option label="Barcelona" value="08">Barcelona</option>
+<option label="Bizkaia" value="48">Bizkaia</option>
+<option label="Burgos" value="09">Burgos</option>
+<option label="Cáceres" value="10">Cáceres</option>
+<option label="Cádiz" value="11">Cádiz</option>
+<option label="Cantabria" value="39">Cantabria</option>
+<option label="Castellón/Castelló" value="12">Castellón/Castelló</option>
+<option label="Ceuta" value="51">Ceuta</option>
+<option label="Ciudad Real" value="13">Ciudad Real</option>
+<option label="Córdoba" value="14">Córdoba</option>
+<option label="Coruña, A" value="15">Coruña, A</option>
+<option label="Cuenca" value="16">Cuenca</option>
+<option label="Gipuzkoa" value="20">Gipuzkoa</option>
+<option label="Girona" value="17">Girona</option>
+<option label="Granada" value="18">Granada</option>
+<option label="Guadalajara" value="19">Guadalajara</option>
+<option label="Huelva" value="21">Huelva</option>
+<option label="Huesca" value="22">Huesca</option>
+<option label="Jaén" value="23">Jaén</option>
+<option label="León" value="24">León</option>
+<option label="Lleida" value="25">Lleida</option>
+<option label="Lugo" value="27">Lugo</option>
+<option label="Madrid" value="28">Madrid</option>
+<option label="Málaga" value="29">Málaga</option>
+<option label="Melilla" value="52">Melilla</option>
+<option label="Murcia" value="30">Murcia</option>
+<option label="Navarra" value="31">Navarra</option>
+<option label="Ourense" value="32">Ourense</option>
+<option label="Palencia" value="34">Palencia</option>
+<option label="Palmas, Las" value="35">Palmas, Las</option>
+<option label="Pontevedra" value="36">Pontevedra</option>
+<option label="Rioja, La" value="26">Rioja, La</option>
+<option label="Salamanca" value="37">Salamanca</option>
+<option label="Santa Cruz de Tenerife" value="38">Santa Cruz de Tenerife</option>
+<option label="Segovia" value="40">Segovia</option>
+<option label="Sevilla" value="41">Sevilla</option>
+<option label="Soria" value="42">Soria</option>
+<option label="Tarragona" value="43">Tarragona</option>
+<option label="Teruel" value="44">Teruel</option>
+<option label="Toledo" value="45">Toledo</option>
+<option label="Valencia/València" value="46">Valencia/València</option>
+<option label="Valladolid" value="47">Valladolid</option>
+<option label="Zamora" value="49">Zamora</option>
+<option label="Zaragoza" value="50">Zaragoza</option>
+<option label="No residentes" value="99">No residentes</option>
+</select>
+</div>
+<div id="fields-organizacion" style="display:none">
+<label for="Accounts___name">Nom de l'entitat</label>
+<input id="Accounts___name" type="text"/>
+<label for="Accounts___email1">Correu electrònic</label>
+<input id="Accounts___email1" type="email" onchange="validateEmailField(this)"/>
+<label for="Accounts___stic_identification_number_c">Núm. de document (CIF)</label>
+<input id="Accounts___stic_identification_number_c" type="text" onchange="validateIdentificationField(this)"/>
+<label for="Accounts___billing_address_state">Província</label>
+<select id="Accounts___billing_address_state" name="Accounts___billing_address_state">
+<option label="" value=""></option>
+<option label="Albacete" value="02">Albacete</option>
+<option label="Alicante/Alacant" value="03">Alicante/Alacant</option>
+<option label="Almería" value="04">Almería</option>
+<option label="Araba/Álava" value="01">Araba/Álava</option>
+<option label="Asturias" value="33">Asturias</option>
+<option label="Ávila" value="05">Ávila</option>
+<option label="Badajoz" value="06">Badajoz</option>
+<option label="Balears, Illes" value="07">Balears, Illes</option>
+<option label="Barcelona" value="08">Barcelona</option>
+<option label="Bizkaia" value="48">Bizkaia</option>
+<option label="Burgos" value="09">Burgos</option>
+<option label="Cáceres" value="10">Cáceres</option>
+<option label="Cádiz" value="11">Cádiz</option>
+<option label="Cantabria" value="39">Cantabria</option>
+<option label="Castellón/Castelló" value="12">Castellón/Castelló</option>
+<option label="Ceuta" value="51">Ceuta</option>
+<option label="Ciudad Real" value="13">Ciudad Real</option>
+<option label="Córdoba" value="14">Córdoba</option>
+<option label="Coruña, A" value="15">Coruña, A</option>
+<option label="Cuenca" value="16">Cuenca</option>
+<option label="Gipuzkoa" value="20">Gipuzkoa</option>
+<option label="Girona" value="17">Girona</option>
+<option label="Granada" value="18">Granada</option>
+<option label="Guadalajara" value="19">Guadalajara</option>
+<option label="Huelva" value="21">Huelva</option>
+<option label="Huesca" value="22">Huesca</option>
+<option label="Jaén" value="23">Jaén</option>
+<option label="León" value="24">León</option>
+<option label="Lleida" value="25">Lleida</option>
+<option label="Lugo" value="27">Lugo</option>
+<option label="Madrid" value="28">Madrid</option>
+<option label="Málaga" value="29">Málaga</option>
+<option label="Melilla" value="52">Melilla</option>
+<option label="Murcia" value="30">Murcia</option>
+<option label="Navarra" value="31">Navarra</option>
+<option label="Ourense" value="32">Ourense</option>
+<option label="Palencia" value="34">Palencia</option>
+<option label="Palmas, Las" value="35">Palmas, Las</option>
+<option label="Pontevedra" value="36">Pontevedra</option>
+<option label="Rioja, La" value="26">Rioja, La</option>
+<option label="Salamanca" value="37">Salamanca</option>
+<option label="Santa Cruz de Tenerife" value="38">Santa Cruz de Tenerife</option>
+<option label="Segovia" value="40">Segovia</option>
+<option label="Sevilla" value="41">Sevilla</option>
+<option label="Soria" value="42">Soria</option>
+<option label="Tarragona" value="43">Tarragona</option>
+<option label="Teruel" value="44">Teruel</option>
+<option label="Toledo" value="45">Toledo</option>
+<option label="Valencia/València" value="46">Valencia/València</option>
+<option label="Valladolid" value="47">Valladolid</option>
+<option label="Zamora" value="49">Zamora</option>
+<option label="Zaragoza" value="50">Zaragoza</option>
+<option label="No residentes" value="99">No residentes</option>
+</select>
+</div>
+<div class="buttons">
+<button class="btn" onclick="previousStep()" type="button">Anterior</button>
+<button class="btn" onclick="nextStep()" type="button">Següent</button>
+</div>
+</div>
+<div class="form-step" id="step-3">
+<h2>Selecciona la teva forma de pagament</h2>
+<label>Mètode de pagament</label>
+<div class="selector-group">
+<button onclick="selectPaymentMethod(this, 'card')" type="button">Targeta</button>
+<button onclick="selectPaymentMethod(this, 'direct_debit')" type="button">Domiciliació</button>
+</div>
+<div id="ibanField" style="display: none;">
+<label for="stic_Payment_Commitments___bank_account">Compte bancari (IBAN)</label>
+<input id="stic_Payment_Commitments___bank_account" type="text" placeholder="ES00 0000 0000 0000 0000 0000"/>
+</div>
+<div class="buttons">
+<button class="btn secondary" onclick="previousStep()" type="button">Anterior</button>
+<button class="btn primary-action" id="submitButton" onclick="submitForm()" type="button">Fes la teva donació →</button>
+</div>
+</div>
+</form>
+</div>
+<div id="deductionModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;">
+<div style="background:white;padding:2rem;max-width:500px;border-radius:8px;position:relative;">
+<span onclick="closeDeductionModal()" style="position:absolute;top:10px;right:15px;cursor:pointer;font-weight:bold;">✖</span>
+<p><strong>El resultat que es mostra és orientatiu</strong> y puede variar en función de la comunidad autónoma y de aportaciones anteriores a la misma organización.</p>
+<table style="width:100%;border-collapse:collapse;margin-bottom:1rem;">
+<tr><th style="border:1px solid #ccc;padding:0.5rem;">Donant</th><th style="border:1px solid #ccc;padding:0.5rem;">Import</th><th style="border:1px solid #ccc;padding:0.5rem;">Desgravació</th></tr>
+<tr><td rowspan="2" style="border:1px solid #ccc;padding:0.5rem;">Persona física</td><td style="border:1px solid #ccc;padding:0.5rem;">Fins a 250 €</td><td style="border:1px solid #ccc;padding:0.5rem;">80%</td></tr>
+<tr><td style="border:1px solid #ccc;padding:0.5rem;">Resta</td><td style="border:1px solid #ccc;padding:0.5rem;">40%</td></tr>
+<tr><td style="border:1px solid #ccc;padding:0.5rem;">Persona jurídica</td><td colspan="2" style="border:1px solid #ccc;padding:0.5rem;">Tot l'import: 40%</td></tr>
+</table>
+<p>La desgravació de la quota íntegra té un límit del 10 % per a persones físiques i del 15 % per a persones jurídiques, d'acord amb el Reial decret llei 6/2023.</p>
+<p>La desgravació augmenta fins al 45 % per a persones físiques i al 50 % per a jurídiques si es fan donacions del mateix import durant dos anys consecutius.</p>
+</div>
+</div>
+<script>
+// ========================================================================
+// CONFIGURACIÓN PARA PRODUCCIÓN
+// ========================================================================
+// Rellena aquí los IDs correspondientes a tu configuración de SinergiaCRM
+// ========================================================================
+
+const formConfig = {
+  'persona_donativo': {
+    campaign_id: 'ID_DE_TU_CAMPAÑA_PERSONA_DONANTE',
+    email_template_id: 'ID_DE_TU_PLANTILLA_PERSONA_DONANTE',
+    relation_type: 'donor',
+    redirect_url: 'URL_EXITO_DONANTE',
+    redirect_ko_url: 'URL_ERROR_DONANTE'
+  },
+  'persona_cuota': {
+    campaign_id: 'ID_DE_TU_CAMPAÑA_PERSONA_SOCIO',
+    email_template_id: 'ID_DE_TU_PLANTILLA_PERSONA_SOCIO',
+    relation_type: 'member',
+    redirect_url: 'URL_EXITO_SOCIO',
+    redirect_ko_url: 'URL_ERROR_SOCIO'
+  },
+  'organizacion_donativo': {
+    campaign_id: 'ID_DE_TU_CAMPAÑA_ORG_DONANTE',
+    email_template_id: 'ID_DE_TU_PLANTILLA_ORG_DONANTE',
+    relation_type: 'donor',
+    redirect_url: 'URL_EXITO_ORG_DONANTE',
+    redirect_ko_url: 'URL_ERROR_ORG_DONANTE'
+  },
+  'organizacion_cuota': {
+    campaign_id: 'ID_DE_TU_CAMPAÑA_ORG_SOCIO',
+    email_template_id: 'ID_DE_TU_PLANTILLA_ORG_SOCIO',
+    relation_type: 'member',
+    redirect_url: 'URL_EXITO_ORG_SOCIO',
+    redirect_ko_url: 'URL_ERROR_ORG_SOCIO'
+  }
+};
+
+// ========================================================================
+// LÓGICA DEL FORMULARIO
+// ========================================================================
+
+let currentStep = 1;
+let donationType = 'donativo'; // 'donativo' o 'cuota'
+let personType = 'persona';     // 'persona' o 'organizacion'
+let selectedAmount = 25;
+let paymentMethod = '';         // 'card' o 'direct_debit'
+let periodicity = 'punctual';   // 'punctual', 'monthly', 'quarterly', 'annual'
+
+function nextStep() {
+  let isValid = true;
+  if (currentStep === 1) {
+    // Validación del Paso 1 (Importe)
+    const custom = parseFloat(document.getElementById('customAmount').value);
+    const buttons = document.querySelectorAll('#amount-buttons button.active');
+    if ((isNaN(custom) || custom <= 0) && buttons.length === 0) {
+      alert("Si us plau, selecciona o introdueix un import vàlid.");
+      document.getElementById('customAmount').classList.add('field-error');
+      isValid = false;
+    } else {
+      document.getElementById('customAmount').classList.remove('field-error');
+      if (!isNaN(custom) && custom > 0) selectedAmount = custom;
+    }
+  } else if (currentStep === 2) {
+    // Validación del Paso 2 (Datos Personales)
+    // La validación real se hará en el submit final, pero aquí
+    // se podría añadir una validación parcial si se quisiera.
+    // De momento, solo avanzamos.
+  }
+  
+  if (isValid) {
+    document.querySelector('.form-step.active').classList.remove('active');
+    document.getElementById(`step-${++currentStep}`).classList.add('active');
+  }
+}
+
+function previousStep() {
+  document.querySelector('.form-step.active').classList.remove('active');
+  document.getElementById(`step-${--currentStep}`).classList.add('active');
+}
+
+function selectDonationType(btn) {
+  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  donationType = btn.dataset.type;
+  
+  const periodicityDiv = document.getElementById('periodicitySelector');
+  const periodicitySelect = document.getElementById('periodicitySelect');
+  
+  if (donationType === 'cuota') {
+    periodicityDiv.style.display = 'block';
+    periodicity = periodicitySelect.value;
+  } else {
+    periodicityDiv.style.display = 'none';
+    periodicity = 'punctual';
+  }
+  updateDeductionMessage();
+}
+
+function selectPersonType(btn) {
+  document.querySelectorAll('[data-person]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  personType = btn.dataset.person;
+  
+  document.getElementById('fields-persona').style.display = personType === 'persona' ? 'block' : 'none';
+  document.getElementById('fields-organizacion').style.display = personType === 'organizacion' ? 'block' : 'none';
+  
+  updateDeductionMessage();
+}
+
+function selectAmount(btn, amount) {
+  document.querySelectorAll('#amount-buttons button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('customAmount').value = '';
+  document.getElementById('customAmount').classList.remove('field-error');
+  selectedAmount = amount;
+  updateDeductionMessage();
+}
+
+function customAmountChanged(input) {
+  document.querySelectorAll('#amount-buttons button').forEach(b => b.classList.remove('active'));
+  input.classList.remove('field-error');
+  const custom = parseFloat(input.value);
+  if (!isNaN(custom) && custom > 0) {
+    selectedAmount = custom;
+  }
+  updateDeductionMessage();
+}
+
+function selectPaymentMethod(btn, method) {
+  document.querySelectorAll('[onclick^="selectPaymentMethod"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  paymentMethod = method;
+  document.getElementById('ibanField').style.display = method === 'direct_debit' ? 'block' : 'none';
+  
+  // Limpiar error si se cambia de método
+  document.getElementById('stic_Payment_Commitments___bank_account').classList.remove('field-error');
+  btn.parentElement.classList.remove('field-error');
+}
+
+function updatePeriodicity(select) {
+  periodicity = select.value;
+  updateDeductionMessage();
+}
+
+/**
+ * Valid if a cif is valid
+ * Adapted to javascript from its original in:
+ * http://www.michublog.com/informatica/8-funciones-para-la-validacion-de-formularios-con-expresiones-regulares
+ * @param cif
+ * @returns {Boolean}
+ */
+function isValidCif(cif) {
+  cif.toUpperCase();
+  cifRegEx1 = /^[ABEH][0-9]{8}/i;
+  cifRegEx2 = /^[KPQS][0-9]{7}[A-J]/i;
+  cifRegEx3 = /^[CDFGJLMNRUVW][0-9]{7}[0-9A-J]/i;
+
+  if (cif.match(cifRegEx1) || cif.match(cifRegEx2) || cif.match(cifRegEx3)) {
+    control = cif.charAt(cif.length - 1);
+    sum_A = 0;
+    sum_B = 0;
+    for (i = 1; i < 8; i++) {
+      if (i % 2 == 0) {
+        sum_A += parseInt(cif.charAt(i));
+      } else {
+        t = (parseInt(cif.charAt(i)) * 2).toString();
+        p = 0;
+        for (j = 0; j < t.length; j++) {
+          p += parseInt(t.charAt(j));
+        }
+        sum_B += p;
+      }
+    }
+
+    sum_C = parseInt(sum_A + sum_B) + ""; // Así se convierte en cadena
+    sum_D = (10 - parseInt(sum_C.charAt(sum_C.length - 1))) % 10;
+    letters = "JABCDEFGHI";
+
+    if (control >= "0" && control <= "9") {
+      return control == sum_D;
+    } else {
+      return control.toUpperCase() == letters[sum_D];
+    }
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Validate an email address
+ * Regex validation email from https://html5-tutorial.net/form-validation/validating-email/
+ * @param email
+ * @returns {Boolean}
+ */
+function isValidEmail(email) {
+  var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function validateEmailField(field) {
+  if (field.value && !isValidEmail(field.value)) {
+    alert('El format del Correu electrònic no és correcte.');
+    field.classList.add('field-error');
+  } else {
+    field.classList.remove('field-error');
+  }
+}
+
+/**
+ * Valida el formato del campo de identificación (NIF/NIE o CIF) dinámicamente
+ * cuando el usuario sale del campo (onchange).
+ * @param {HTMLElement} field - El elemento <input> que se está validando.
+ */
+function validateIdentificationField(field) {
+  const value = field.value;
+  // Si el campo está vacío, solo quitamos el error (la validación de "obligatorio" se hará al enviar)
+  if (!value) { 
+    field.classList.remove('field-error');
+    return;
+  }
+
+  let isValid = true;
+  let errorMsg = '';
+
+  if (personType === 'persona') {
+    const idType = document.getElementById('Contacts___stic_identification_type_c').value;
+    // Solo validamos NIF/NIE. Pasaporte u "Otros" no se validan.
+    if (idType === 'nif' || idType === 'nie' || idType === '') {
+      isValid = isValidDNI(value);
+      errorMsg = 'El format del Núm. de document (NIF/NIE) no és correcte.';
+    }
+  } else { // organizacion
+    isValid = isValidCif(value);
+    errorMsg = 'El format del Núm. de document (CIF) no és correcte.';
+  }
+
+  // Mostramos el error o limpiamos el campo
+  if (!isValid) {
+    alert(errorMsg); // Mantenemos la consistencia con la alerta del email
+    field.classList.add('field-error');
+  } else {
+    field.classList.remove('field-error');
+  }
+}
+
+/**
+ * Check if it is a correct ID (between 5 and 8 letters followed by the corresponding letter).
+ * Accept NIEs (Foreigners with X, Y or Z at the beginning)
+ * http://trellat.es/funcion-para-validar-dni-o-nie-en-javascript/
+ * @param dni
+ * @returns {Boolean}
+ */
+function isValidDNI(dni) {
+  var number, lett, letter;
+  var regular_expression_dni = /^[XYZ]?\d{5,8}[A-Z]$/;
+  dni = dni.toUpperCase();
+
+  if (regular_expression_dni.test(dni) === true) {
+    number = dni.substr(0, dni.length - 1);
+    number = number.replace("X", 0);
+    number = number.replace("Y", 1);
+    number = number.replace("Z", 2);
+    lett = dni.substr(dni.length - 1, 1);
+    number = number % 23;
+
+    letter = "TRWAGMYFPDXBNJZSQVHLCKET";
+    letter = letter.substring(number, number + 1);
+
+    return letter == lett;
+  } else {
+    return false;
+  }
+}
+
+// ========================================================================
+// LÓGICA DE VALIDACIÓN Y ENVÍO
+// ========================================================================
+
+/**
+ * Valida los campos obligatorios antes de enviar.
+ * Devuelve true si es válido, false si no.
+ */
+function validateCustomForm() {
+  let requiredFields = [];
+  let errorMessages = [];
+  
+  // 1. Limpiar errores previos
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+
+  // 2. Construir lista de campos obligatorios (req_id)
+  if (personType === 'persona') {
+    requiredFields = [
+      'Contacts___first_name',
+      'Contacts___last_name',
+      'Contacts___email1',
+      'Contacts___stic_identification_number_c'
+    ];
+  } else { // organizacion
+    requiredFields = [
+      'Accounts___name',
+      'Accounts___email1',
+      'Accounts___stic_identification_number_c'
+    ];
+  }
+  
+  // 3. Añadir campos comunes de pago
+  requiredFields.push('stic_Payment_Commitments___payment_method_selector'); // Usamos el contenedor
+  requiredFields.push('stic_Payment_Commitments___periodicity_selector'); // Usamos el contenedor
+  
+  // 4. Añadir IBAN si es domiciliación
+  if (paymentMethod === 'direct_debit') {
+    requiredFields.push('stic_Payment_Commitments___bank_account');
+  }
+  
+  // 5. Validar los campos
+  let firstErrorField = null;
+  
+  for (const fieldId of requiredFields) {
+    let element;
+    let value;
+    
+    // Casos especiales para los selectores de botones
+    if (fieldId === 'stic_Payment_Commitments___payment_method_selector') {
+      value = paymentMethod;
+      element = document.querySelector('[onclick^="selectPaymentMethod"]').parentElement;
+    } else if (fieldId === 'stic_Payment_Commitments___periodicity_selector') {
+      value = periodicity; // 'punctual' o el valor del select
+      element = document.getElementById('periodicitySelector'); // O el grupo de botones de tipo
+    } else {
+      element = document.getElementById(fieldId);
+      if (!element) continue;
+      value = element.value;
+    }
+    
+    if (!value || value.trim() === '') {
+      errorMessages.push(`El camp "${element.previousElementSibling?.textContent || fieldId}" és obligatori.`);
+      element.classList.add('field-error');
+      if (!firstErrorField) firstErrorField = element;
+    }
+  }
+  
+  // 6. Validación específica de formato IBAN
+  if (paymentMethod === 'direct_debit') {
+    const ibanElement = document.getElementById('stic_Payment_Commitments___bank_account');
+    const ibanValue = ibanElement.value.replace(/\s/g, ''); // Quitar espacios
+    // Validación básica: ES + 22 dígitos. La validación real la hará el servidor.
+    const ibanRegex = /^ES\d{22}$/i; 
+    if (!ibanRegex.test(ibanValue)) {
+      errorMessages.push('El format del compte bancari (IBAN) no és correcte. Ha de ser ES seguit de 22 dígits.');
+      ibanElement.classList.add('field-error');
+      if (!firstErrorField) firstErrorField = ibanElement;
+    }
+  }
+
+  // 6.5. Validación específica de formato NIF/CIF
+  // (El campo 'validate_identification_number' está en '1' en el submit, así que ejecutamos esto)
+  if (personType === 'persona') {
+    const identificationType = document.getElementById('Contacts___stic_identification_type_c').value;
+    const nifElement = document.getElementById('Contacts___stic_identification_number_c');
+    const nifValue = nifElement.value;
+    
+    // Validar solo si el campo tiene valor y el tipo es nif/nie o no está especificado
+    if (nifValue && (identificationType === 'nif' || identificationType === 'nie' || identificationType === '')) {
+      if (!isValidDNI(nifValue)) {
+        errorMessages.push('El format del Núm. de document (NIF/NIE) no és correcte.');
+        nifElement.classList.add('field-error');
+        if (!firstErrorField) firstErrorField = nifElement;
+      }
+    }
+  } else { // organizacion
+    const cifElement = document.getElementById('Accounts___stic_identification_number_c');
+    const cifValue = cifElement.value;
+    
+    // Validar solo si el campo tiene valor
+    if (cifValue) {
+      if (!isValidCif(cifValue)) {
+        errorMessages.push('El format del Núm. de document (CIF) no és correcte.');
+        cifElement.classList.add('field-error');
+        if (!firstErrorField) firstErrorField = cifElement;
+      }
+    }
+  }
+
+  // 6.8. Validación específica de formato Email
+  if (personType === 'persona') {
+    const emailElement = document.getElementById('Contacts___email1');
+    const emailValue = emailElement.value;
+    
+    // Validar solo si el campo tiene valor (el campo obligatorio ya se comprueba arriba)
+    if (emailValue && !isValidEmail(emailValue)) {
+      errorMessages.push('El format del Correu electrònic no és correcte.');
+      emailElement.classList.add('field-error');
+      if (!firstErrorField) firstErrorField = emailElement;
+    }
+  } else { // organizacion
+    const emailElement = document.getElementById('Accounts___email1');
+    const emailValue = emailElement.value;
+
+    // Validar solo si el campo tiene valor
+    if (emailValue && !isValidEmail(emailValue)) {
+      errorMessages.push('El format del Correu electrònic no és correcte.');
+      emailElement.classList.add('field-error');
+      if (!firstErrorField) firstErrorField = emailElement;
+    }
+  }
+
+  // 7. Mostrar errores si existen
+  if (errorMessages.length > 0) {
+    alert("Si us plau, corregeix els errors següents:\n\n- " + errorMessages.join('\n- '));
+    // Navegar al paso del primer error
+    let errorStep = firstErrorField.closest('.form-step').id.split('-')[1];
+    if (errorStep && currentStep != errorStep) {
+        document.querySelector('.form-step.active').classList.remove('active');
+        document.getElementById(`step-${errorStep}`).classList.add('active');
+        currentStep = parseInt(errorStep);
+    }
+    firstErrorField.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+/**
+ * Construye y envía el formulario dinámico a SinergiaCRM
+ */
+function submitForm() {
+  // 1. Validar el formulario
+  if (!validateCustomForm()) {
+    return;
+  }
+  
+  // Bloquear botón para evitar doble envío
+  const submitButton = document.getElementById('submitButton');
+  submitButton.disabled = true;
+  submitButton.textContent = 'Enviant...';
+
+  // 2. Determinar el caso de uso y obtener configuración
+  const useCase = `${personType}_${donationType === 'cuota' ? 'cuota' : 'donativo'}`;
+  const config = formConfig[useCase];
+  
+  // 3. Crear el formulario dinámico
+  const f = document.createElement('form');
+  f.method = 'POST';
+  f.action = 'https://[INSTANCIA].sinergiacrm.org/index.php?entryPoint=stic_Web_Forms_save';
+
+  const add = (name, value) => {
+    const input = document.createElement('input');
+    input.type = 'hidden'; 
+    input.name = name; 
+    input.value = value; 
+    f.appendChild(input);
+  };
+
+  // 4. Construir la lista de campos obligatorios (req_id) para SinergiaCRM
+  let reqIdValue = "stic_Payment_Commitments___amount;stic_Payment_Commitments___payment_method;stic_Payment_Commitments___periodicity;";
+  if (personType === 'persona') {
+    reqIdValue += "Contacts___first_name;Contacts___last_name;Contacts___email1;Contacts___stic_identification_number_c;";
+  } else {
+    reqIdValue += "Accounts___name;Accounts___email1;Accounts___stic_identification_number_c;";
+  }
+  if (paymentMethod === 'direct_debit') {
+    reqIdValue += "stic_Payment_Commitments___bank_account;";
+  }
+
+  // 5. Añadir campos ocultos de configuración
+  add('campaign_id', config.campaign_id);
+  add('redirect_url', config.redirect_url); // URL de éxito (dinámica)
+  add('redirect_ko_url', config.redirect_ko_url); // URL de error (dinámica)
+  add('validate_identification_number', '1');
+  const allowRecurrence = donationType === 'cuota' ? '1' : '0';
+  add('allow_card_recurring_payments', allowRecurrence);
+  add('allow_paypal_recurring_payments', allowRecurrence);
+  add('allow_stripe_recurring_payments', allowRecurrence);
+  add('assigned_user_id', '2');
+  add('web_module', personType === 'persona' ? 'Contacts' : 'Accounts');
+  add('language', 'es_ES');
+  add('webFormClass', 'Donation');
+  add('req_id', reqIdValue); // Añadido el req_id dinámico
+
+  // 6. Añadir defParams
+  const defParams = {
+    version: '2',
+    email_template_id: config.email_template_id,
+    relation_type: config.relation_type,
+    include_recaptcha: 0,
+    recaptcha_configKeys: [],
+    recaptcha_selected: ''
+  };
+  add('defParams', encodeURIComponent(JSON.stringify(defParams)));
+
+  // 7. Añadir los datos del usuario
+  if (personType === 'persona') {
+    add('Contacts___first_name', document.getElementById('Contacts___first_name').value);
+    add('Contacts___last_name', document.getElementById('Contacts___last_name').value);
+    add('Contacts___email1', document.getElementById('Contacts___email1').value);
+    add('Contacts___stic_identification_type_c', document.getElementById('Contacts___stic_identification_type_c').value);
+    add('Contacts___stic_identification_number_c', document.getElementById('Contacts___stic_identification_number_c').value);
+    add('Contacts___primary_address_state', document.getElementById('Contacts___primary_address_state').value);
+  } else {
+    add('Accounts___name', document.getElementById('Accounts___name').value);
+    add('Accounts___email1', document.getElementById('Accounts___email1').value);
+    add('Accounts___stic_identification_number_c', document.getElementById('Accounts___stic_identification_number_c').value);
+    add('Accounts___billing_address_state', document.getElementById('Accounts___billing_address_state').value);
+  }
+  
+  // 8. Añadir los datos del pago
+  add('stic_Payment_Commitments___payment_type', donationType === 'cuota' ? 'fee' : 'donation');
+  add('stic_Payment_Commitments___amount', selectedAmount);
+  add('stic_Payment_Commitments___payment_method', paymentMethod);
+  add('stic_Payment_Commitments___periodicity', donationType === 'cuota' ? periodicity : 'punctual');
+  if (paymentMethod === 'direct_debit') {
+    add('stic_Payment_Commitments___bank_account', document.getElementById('stic_Payment_Commitments___bank_account').value);
+  }
+
+  // 9. Enviar el formulario
+  document.body.appendChild(f);
+  f.submit();
+}
+
+// ========================================================================
+// LÓGICA DEL MODAL Y CÁLCULO DE DESGRAVACIÓN
+// ========================================================================
+
+function openDeductionModal() {
+  document.getElementById('deductionModal').style.display = 'flex';
+}
+function closeDeductionModal() {
+  document.getElementById('deductionModal').style.display = 'none';
+}
+
+function updateDeductionMessage() {
+  const periodicityMap = {
+    'monthly': 12,
+    'quarterly': 4,
+    'annual': 1,
+    'punctual': 1
+  };
+  
+  const currentPeriodicity = (donationType === 'cuota') ? periodicity : 'punctual';
+  const freq = periodicityMap[currentPeriodicity] || 1;
+  const annualAmount = selectedAmount * freq;
+  const isPersona = personType === 'persona';
+  let deduction = 0;
+  
+  if (isPersona) {
+    if (annualAmount <= 250) {
+      deduction = annualAmount * 0.8;
+    } else {
+      deduction = (250 * 0.8) + ((annualAmount - 250) * 0.4);
+    }
+  } else { // Empresa
+    deduction = annualAmount * 0.4;
+  }
+  
+  const target = document.getElementById('deductionText');
+  if (target) {
+    target.textContent = `Desgrava fins a ${deduction.toFixed(2)} € a l'any`;
+  }
+}
+
+// Inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+  selectAmount(document.querySelector('#amount-buttons button'), 25);
+  selectDonationType(document.querySelector('[data-type="donativo"]'));
+  selectPersonType(document.querySelector('[data-person="persona"]'));
+  updateDeductionMessage();
+});
+</script>
+
+</body>
+</html>
