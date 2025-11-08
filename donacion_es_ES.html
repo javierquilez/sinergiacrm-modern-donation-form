@@ -22,14 +22,43 @@
     .field-error { border-color: #c21630; background-color: #fff8f8; }
     .btn.secondary { background-color: #fff; color: #c21630; border: 1px solid #c21630;}
     .btn.primary-action { padding: 0.75rem 1.25rem; /* Un poco más grande */  font-size: 1.1rem;  font-weight: bold;}
+        /* Estilo para campos con error */
+    .field-error { border-color: #c21630; background-color: #fff8f8; }
+    .btn.secondary { background-color: #fff; color: #c21630; border: 1px solid #c21630;}
+    .btn.primary-action { padding: 0.75rem 1.25rem; /* Un poco más grande */  font-size: 1.1rem;  font-weight: bold;}
+    /* 1. Indicador de Pasos (con tu color rojo) */
+    .progress-indicator { display: flex; justify-content: center; align-items: center; margin-bottom: 2rem; }
+    .step-circle { width: 30px; height: 30px; line-height: 28px; border-radius: 50%; background-color: #f0f0f0; color: #999; text-align: center; font-weight: bold; border: 2px solid #f0f0f0; }
+    .step-circle.active { background-color: #c21630; color: white; border-color: #c21630; }
+    .step-circle.done { background-color: white; color: #c21630; border-color: #c21630; font-size: 1.2rem; line-height: 26px; } /* Se puede poner '✓' aquí */
+    .step-line { width: 40px; height: 2px; background-color: #f0f0f0; }
+    .step-line.active { background-color: #c21630; }
+
+    /* 2. Subtítulos y Resumen de Importe */
+    .step-subtitle { font-size: 1.1rem; color: #555; text-align: center; margin-top: 1rem; margin-bottom: 2rem; }
+    .step-subtitle span { font-weight: bold; color: #333; }
+
+    /* 3. Conexión Segura (Candado) */
+    .secure-connection { text-align: center; color: #777; margin: 1.5rem 0; font-size: 0.9rem; }
+    .secure-connection svg { vertical-align: middle; margin-right: 5px; }
+    
+    /* 4. Botón 'Volver' (como en las capturas) */
+    .back-button { color: #555; text-decoration: none; font-size: 0.9rem; cursor: pointer; }
   </style>
 </head>
 <body>
 <div class="form-container">
 <form id="donationForm">
+<div class="progress-indicator">
+<div class="step-circle active" id="circle-1">1</div>
+<div class="step-line" id="line-1-2"></div>
+<div class="step-circle" id="circle-2">2</div>
+<div class="step-line" id="line-2-3"></div>
+<div class="step-circle" id="circle-3">3</div>
+</div>
 <div class="form-step active" id="step-1">
 <h2>Quiero ayudar con mi aportación</h2>
-<label>Tipo de aportación</label>
+<p class="step-subtitle">Escoje cuanto quieres donar</p>
 <div class="selector-group">
 <button class="active" data-type="donativo" onclick="selectDonationType(this)" type="button">Puntual</button>
 <button data-type="cuota" onclick="selectDonationType(this)" type="button">Periódica</button>
@@ -65,6 +94,7 @@
 </div>
 <div class="form-step" id="step-2">
 <h2>Tus datos</h2>
+<p class="step-subtitle"><span id="summary-amount-step2"></span></p>
 <div id="fields-persona">
 <label for="Contacts___first_name">Nombre</label>
 <input id="Contacts___first_name" type="text"/>
@@ -205,6 +235,7 @@
 <option label="No residentes" value="99">No residentes</option>
 </select>
 </div>
+
 <div class="buttons">
 <button class="btn" onclick="previousStep()" type="button">Anterior</button>
 <button class="btn" onclick="nextStep()" type="button">Siguiente</button>
@@ -212,6 +243,7 @@
 </div>
 <div class="form-step" id="step-3">
 <h2>Selecciona tu forma de pago</h2>
+<p class="step-subtitle"><span id="summary-amount-step3"></span></p>
 <label>Método de pago</label>
 <div class="selector-group">
 <button onclick="selectPaymentMethod(this, 'card')" type="button">Tarjeta</button>
@@ -221,9 +253,16 @@
 <label for="stic_Payment_Commitments___bank_account">Cuenta bancaria (IBAN)</label>
 <input id="stic_Payment_Commitments___bank_account" type="text" placeholder="ES00 0000 0000 0000 0000 0000"/>
 </div>
+<div class="secure-connection">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="#777" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 5px;">
+    <path d="M12 11.9999C12.5523 11.9999 13 12.4476 13 12.9999V15.9999C13 16.5522 12.5523 16.9999 12 16.9999C11.4477 16.9999 11 16.5522 11 15.9999V12.9999C11 12.4476 11.4477 11.9999 12 11.9999Z" fill="currentColor"/>
+    <path d="M18 8.99991H17V6.99991C17 4.23848 14.7614 1.99991 12 1.99991C9.23858 1.99991 7 4.23848 7 6.99991V8.99991H6C4.89543 8.99991 4 9.89534 4 10.9999V19.9999C4 21.1045 4.89543 21.9999 6 21.9999H18C19.1046 21.9999 20 21.1045 20 19.9999V10.9999C20 9.89534 19.1046 8.99991 18 8.99991ZM9 6.99991C9 5.34305 10.3431 3.99991 12 3.99991C13.6569 3.99991 15 5.34305 15 6.99991V8.99991H9V6.99991Z" fill="currentColor"/>
+  </svg>
+  <span>Connexión Segura</span>
+</div>
 <div class="buttons">
-<button class="btn secondary" onclick="previousStep()" type="button">Anterior</button>
-<button class="btn primary-action" id="submitButton" onclick="submitForm()" type="button">Haz tu donación →</button>
+<a onclick="previousStep()" class="back-button">❮ Volver</a>
+<button class="btn primary-action" id="submitButton" onclick="submitForm()" type="button">HAZ TU DONACIÓN →</button>
 </div>
 </div>
 </form>
@@ -298,7 +337,7 @@ function nextStep() {
     const custom = parseFloat(document.getElementById('customAmount').value);
     const buttons = document.querySelectorAll('#amount-buttons button.active');
     if ((isNaN(custom) || custom <= 0) && buttons.length === 0) {
-      alert("Por favor, selecciona o introduce un importe válido.");
+      alert("Si us plau, selecciona o introdueix un import vàlid.");
       document.getElementById('customAmount').classList.add('field-error');
       isValid = false;
     } else {
@@ -312,15 +351,47 @@ function nextStep() {
     // De momento, solo avanzamos.
   }
   
-  if (isValid) {
+  if (isValid) {    
+    
+    
+    // 1. Texto base del importe
+    const baseAmountText = `${selectedAmount.toFixed(2).replace('.', ',')} €`;
+    let fullAmountText = baseAmountText; // Por defecto es solo el importe
+
+    // 2. Si es cuota, añadir la periodicidad (usamos las variables globales 'donationType' y 'periodicity')
+    if (donationType === 'cuota') {
+      // Mapa de valores a texto (en catalán, como el resto del form)
+      const periodicityMap = {
+        'monthly': 'mensuales',
+        'quarterly': 'trimestralse',
+        'annual': 'anuales'
+      };
+      
+      // 'periodicity' es una variable global que ya tiene el valor (ej: 'monthly')
+      const periodicityText = periodicityMap[periodicity] || periodicity; 
+      
+      fullAmountText = `${baseAmountText} ${periodicityText}`;
+    }
+
+    // 3. Actualizar los subtítulos
+    if (document.getElementById('summary-amount-step2')) {
+      document.getElementById('summary-amount-step2').textContent = fullAmountText;
+    }
+    if (document.getElementById('summary-amount-step3')) {
+      document.getElementById('summary-amount-step3').textContent = fullAmountText;
+    }    
+
     document.querySelector('.form-step.active').classList.remove('active');
     document.getElementById(`step-${++currentStep}`).classList.add('active');
+   
+    updateProgressIndicator(currentStep);
   }
 }
 
 function previousStep() {
   document.querySelector('.form-step.active').classList.remove('active');
   document.getElementById(`step-${--currentStep}`).classList.add('active');
+  updateProgressIndicator(currentStep);
 }
 
 function selectDonationType(btn) {
@@ -385,6 +456,37 @@ function selectPaymentMethod(btn, method) {
 function updatePeriodicity(select) {
   periodicity = select.value;
   updateDeductionMessage();
+}
+
+/**
+ * Actualiza el indicador visual de pasos (1-2-3)
+ * @param {number} step - El número del paso actual (1, 2, o 3)
+ */
+function updateProgressIndicator(step) {
+  // Resetea todos
+  document.querySelectorAll('.step-circle').forEach(circle => circle.classList.remove('active', 'done'));
+  document.querySelectorAll('.step-line').forEach(line => line.classList.remove('active'));
+
+  // Activa el paso actual
+  document.getElementById('circle-' + step).classList.add('active');
+  
+  // Marca los pasos anteriores como "hechos" (con '✓')
+  for (let i = 1; i < step; i++) {
+    const circle = document.getElementById('circle-' + i);
+    circle.classList.remove('active');
+    circle.classList.add('done');
+    circle.textContent = '✓'; // Añade checkmark
+    // Activa la línea de conexión
+    const line = document.getElementById('line-' + i + '-' + (i + 1));
+    if (line) line.classList.add('active');
+  }
+  
+  // Asegura que los pasos futuros no tengan checkmark
+  for (let i = step + 1; i <= 3; i++) {
+    document.getElementById('circle-' + i).textContent = i;
+  }
+  // Y el actual tenga su número
+  document.getElementById('circle-' + step).textContent = step;
 }
 
 /**
