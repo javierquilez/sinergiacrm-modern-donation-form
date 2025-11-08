@@ -6,8 +6,6 @@ Este proyecto proporciona un **frontend multipaso en JavaScript vanilla (sin dep
 
 ## Flujo del formulario
 
-El proceso guía a la persona usuaria en **tres pasos**. Las capturas corresponden a la versión de referencia:
-
 **Paso 1. Importe y tipo de aportación**  
 El usuario elige el importe, define si será puntual o periódica, y visualiza una estimación de desgravación fiscal en tiempo real. Debajo del importe hay un enlace de ayuda que abre la explicación detallada en una ventana modal.
 
