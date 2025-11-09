@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Formulari de Donació</title>
+  <title>Formulario de Donación</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -251,25 +251,25 @@
         <div class="step-circle" id="circle-3">3</div>
       </div>
       <div class="form-step active" id="step-1">
-        <h2>Vull ajudar amb la meva aportació</h2>
-        <label>Tipus d'aportació</label>
+        <h2>Quiero ayudar con mi aportación</h2>
+        <label>Tipo de aportación</label>
         <div class="selector-group">
           <button class="active" data-type="donativo" onclick="selectDonationType(this)" type="button">
             Puntual
           </button>
           <button data-type="cuota" onclick="selectDonationType(this)" type="button">
-            Periòdica
+            Periódica
           </button>
         </div>
         <div id="periodicitySelector" style="display: none">
-          <label>Periodicitat</label>
+          <label>Periodicidad</label>
           <select id="periodicitySelect" onchange="updatePeriodicity(this)">
             <option value="monthly">Mensual</option>
             <option value="quarterly">Trimestral</option>
             <option value="annual">Anual</option>
           </select>
         </div>
-        <label>Import</label>
+        <label>Importe</label>
         <div class="selector-group" id="amount-buttons">
           <button onclick="selectAmount(this, 25)" type="button">25€</button>
           <button onclick="selectAmount(this, 50)" type="button">50€</button>
@@ -281,7 +281,7 @@
         </div>
         <div id="deductionInfo" style="text-align: center; margin-top: 1rem">
           <p id="deductionText" style="color: green; font-weight: bold; font-size: 1rem">
-            ℹ Desgrava fins a 0 € a l'any
+            ℹ Desgrava hasta 0 € al año
           </p>
           <a href="#" onclick="openDeductionModal(); return false;" style="
                 display: block;
@@ -289,9 +289,9 @@
                 font-size: 0.9rem;
                 margin-top: 0.5rem;
                 color: #2a7ae2;
-              ">ℹ Més informació sobre la desgravació</a>
+              ">ℹ Más información sobre la desgravación</a>
         </div>
-        <label>Tipus de persona</label>
+        <label>Tipo de persona</label>
         <div class="selector-group">
           <button class="active" data-person="persona" onclick="selectPersonType(this)" type="button">
             Persona física
@@ -303,27 +303,26 @@
         <div class="buttons">
           <span></span>
           <button class="btn" onclick="nextStep()" type="button">
-            Següent
+            Siguiente
           </button>
         </div>
         <p class="form-footer-note">
-          [ENTIDAD] és una Fundació inscrita en el
-          Registre de Fundacions del Departament de Justícia de la Generalitat
-          de Catalunya inscrita amb el número [XX]. Gràcies per la teva
-          col·laboració!
+          [ENTIDAD] es una Fundación inscrita en el
+          Registro de Fundaciones del Departamento de Justicia de la Generalidad
+          de Cataluña inscrita con el número [XX]. ¡Gracias por tu colaboración!
         </p>
       </div>
       <div class="form-step" id="step-2">
-        <h2>Les teves dades</h2>
+        <h2>Tus datos</h2>
         <p class="step-subtitle"><span id="summary-amount-step2"></span></p>
         <div id="fields-persona">
-          <label for="Contacts___first_name">Nom</label>
+          <label for="Contacts___first_name">Nombre</label>
           <input id="Contacts___first_name" type="text" />
-          <label for="Contacts___last_name">Cognoms</label>
+          <label for="Contacts___last_name">Apellidos</label>
           <input id="Contacts___last_name" type="text" />
-          <label for="Contacts___email1">Correu electrònic</label>
+          <label for="Contacts___email1">Correo electrónico</label>
           <input id="Contacts___email1" type="email" onchange="validateEmailField(this)" />
-          <label for="Contacts___stic_identification_type_c">Tipus de document</label>
+          <label for="Contacts___stic_identification_type_c">Tipo de documento</label>
           <select id="Contacts___stic_identification_type_c"
             onchange="validateIdentificationField(document.getElementById('Contacts___stic_identification_number_c'))">
             <option label="" value=""></option>
@@ -332,10 +331,10 @@
             <option label="Pasaporte" value="passport">Pasaporte</option>
             <option label="Otros" value="other">Otros</option>
           </select>
-          <label for="Contacts___stic_identification_number_c">Núm. de document</label>
+          <label for="Contacts___stic_identification_number_c">N.º de documento</label>
           <input id="Contacts___stic_identification_number_c" type="text"
             onchange="validateIdentificationField(this)" />
-          <label for="Contacts___primary_address_state">Província</label>
+          <label for="Contacts___primary_address_state">Provincia</label>
           <select id="Contacts___primary_address_state" name="Contacts___primary_address_state">
             <option label="" value=""></option>
             <option label="Albacete" value="02">Albacete</option>
@@ -404,26 +403,26 @@
             <div class="rgpd-field">
               <input type="checkbox" id="Contacts___privacy_policy" name="Contacts___privacy_policy"
                 onclick="this.parentElement.querySelector('label').classList.remove('field-error');" />
-              <label for="Contacts___privacy_policy">He llegit i accepto la
-                <a href="#" onclick="alert('Enllaç a la Política de Privacitat'); return false;"
-                  target="_blank">Política de Privacitat</a>.</label>
+              <label for="Contacts___privacy_policy">He leído y acepto la
+                <a href="#" onclick="alert('Enlace a la Política de Privacidad'); return false;"
+                  target="_blank">Política de Privacidad</a>.</label>
             </div>
             <div class="rgpd-field">
               <input type="checkbox" id="Contacts___gdpr_marketing" name="Contacts___gdpr_marketing" />
-              <label for="Contacts___gdpr_marketing">Sí, vull rebre informació sobre l'activitat de l'entitat,
-                campanyes i altres formes de col·laborar.</label>
+              <label for="Contacts___gdpr_marketing">Sí, quiero recibir información sobre la actividad de la entidad,
+                campañas y otras formas de colaborar.</label>
             </div>
           </div>
         </div>
         <div id="fields-organizacion" style="display: none">
-          <label for="Accounts___name">Nom de l'entitat</label>
+          <label for="Accounts___name">Nombre de la entidad</label>
           <input id="Accounts___name" type="text" />
-          <label for="Accounts___email1">Correu electrònic</label>
+          <label for="Accounts___email1">Correo electrónico</label>
           <input id="Accounts___email1" type="email" onchange="validateEmailField(this)" />
-          <label for="Accounts___stic_identification_number_c">Núm. de document (CIF)</label>
+          <label for="Accounts___stic_identification_number_c">N.º de documento (CIF)</label>
           <input id="Accounts___stic_identification_number_c" type="text"
             onchange="validateIdentificationField(this)" />
-          <label for="Accounts___billing_address_state">Província</label>
+          <label for="Accounts___billing_address_state">Provincia</label>
           <select id="Accounts___billing_address_state" name="Accounts___billing_address_state">
             <option label="" value=""></option>
             <option label="Albacete" value="02">Albacete</option>
@@ -492,14 +491,14 @@
             <div class="rgpd-field">
               <input type="checkbox" id="Accounts___privacy_policy" name="Accounts___privacy_policy"
                 onclick="this.parentElement.querySelector('label').classList.remove('field-error');" />
-              <label for="Accounts___privacy_policy">He llegit i accepto la
-                <a href="#" onclick="alert('Enllaç a la Política de Privacitat'); return false;"
-                  target="_blank">Política de Privacitat</a>.</label>
+              <label for="Accounts___privacy_policy">He leído y acepto la
+                <a href="#" onclick="alert('Enlace a la Política de Privacidad'); return false;"
+                  target="_blank">Política de Privacidad</a>.</label>
             </div>
             <div class="rgpd-field">
               <input type="checkbox" id="Accounts___gdpr_marketing" name="Accounts___gdpr_marketing" />
-              <label for="Accounts___gdpr_marketing">Sí, vull rebre informació sobre l'activitat de l'entitat,
-                campanyes i altres formes de col·laborar.</label>
+              <label for="Accounts___gdpr_marketing">Sí, quiero recibir información sobre la actividad de la entidad,
+                campañas y otras formas de colaborar.</label>
             </div>
           </div>
         </div>
@@ -508,24 +507,24 @@
             Anterior
           </button>
           <button class="btn" onclick="nextStep()" type="button">
-            Següent
+            Siguiente
           </button>
         </div>
       </div>
       <div class="form-step" id="step-3">
-        <h2>Selecciona la teva forma de pagament</h2>
+        <h2>Selecciona tu forma de pago</h2>
         <p class="step-subtitle"><span id="summary-amount-step3"></span></p>
-        <label>Mètode de pagament</label>
+        <label>Método de pago</label>
         <div class="selector-group">
           <button onclick="selectPaymentMethod(this, 'card')" type="button">
-            Targeta
+            Tarjeta
           </button>
           <button onclick="selectPaymentMethod(this, 'direct_debit')" type="button">
-            Domiciliació
+            Domiciliación
           </button>
         </div>
         <div id="ibanField" style="display: none">
-          <label for="stic_Payment_Commitments___bank_account">Compte bancari (IBAN)</label>
+          <label for="stic_Payment_Commitments___bank_account">Cuenta bancaria (IBAN)</label>
           <input id="stic_Payment_Commitments___bank_account" type="text" placeholder="ES00 0000 0000 0000 0000 0000" />
         </div>
         <div class="secure-connection">
@@ -538,12 +537,12 @@
               d="M18 8.99991H17V6.99991C17 4.23848 14.7614 1.99991 12 1.99991C9.23858 1.99991 7 4.23848 7 6.99991V8.99991H6C4.89543 8.99991 4 9.89534 4 10.9999V19.9999C4 21.1045 4.89543 21.9999 6 21.9999H18C19.1046 21.9999 20 21.1045 20 19.9999V10.9999C20 9.89534 19.1046 8.99991 18 8.99991ZM9 6.99991C9 5.34305 10.3431 3.99991 12 3.99991C13.6569 3.99991 15 5.34305 15 6.99991V8.99991H9V6.99991Z"
               fill="currentColor" />
           </svg>
-          <span>Connexió Segura</span>
+          <span>Conexión Segura</span>
         </div>
         <div class="buttons">
           <a onclick="previousStep()" class="back-button">❮ Volver</a>
           <button class="btn primary-action" id="submitButton" onclick="submitForm()" type="button">
-            FES LA TEVA DONACIÓ →
+            HAZ TU DONACIÓN →
           </button>
         </div>
       </div>
@@ -576,27 +575,27 @@
             font-weight: bold;
           ">✖</span>
       <p>
-        <strong>El resultat que es mostra és orientatiu</strong> y puede
+        <strong>El resultado que se muestra es orientativo</strong> y puede
         variar en función de la comunidad autónoma y de aportaciones
         anteriores a la misma organización.
       </p>
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem">
         <tr>
-          <th style="border: 1px solid #ccc; padding: 0.5rem">Donant</th>
-          <th style="border: 1px solid #ccc; padding: 0.5rem">Import</th>
-          <th style="border: 1px solid #ccc; padding: 0.5rem">Desgravació</th>
+          <th style="border: 1px solid #ccc; padding: 0.5rem">Donante</th>
+          <th style="border: 1px solid #ccc; padding: 0.5rem">Importe</th>
+          <th style="border: 1px solid #ccc; padding: 0.5rem">Desgravación</th>
         </tr>
         <tr>
           <td rowspan="2" style="border: 1px solid #ccc; padding: 0.5rem">
             Persona física
           </td>
           <td style="border: 1px solid #ccc; padding: 0.5rem">
-            Fins a 250 €
+            Hasta 250 €
           </td>
           <td style="border: 1px solid #ccc; padding: 0.5rem">80%</td>
         </tr>
         <tr>
-          <td style="border: 1px solid #ccc; padding: 0.5rem">Resta</td>
+          <td style="border: 1px solid #ccc; padding: 0.5rem">Resto</td>
           <td style="border: 1px solid #ccc; padding: 0.5rem">40%</td>
         </tr>
         <tr>
@@ -604,12 +603,12 @@
             Persona jurídica
           </td>
           <td colspan="2" style="border: 1px solid #ccc; padding: 0.5rem">
-            Tot l'import: 40%
+            Todo el importe: 40%
           </td>
         </tr>
       </table>
       <p>
-        La desgravació de la quota íntegra té un límit del 10 % per a persones
+        La desgravación de la quota íntegra té un límit del 10 % per a persones
         físiques i del 15 % per a persones jurídiques, d'acord amb el Reial
         decret llei 6/2023.
       </p>
@@ -680,7 +679,7 @@
           "#amount-buttons button.active"
         );
         if ((isNaN(custom) || custom <= 0) && buttons.length === 0) {
-          alert("Si us plau, selecciona o introdueix un import vàlid.");
+          alert("Por favor, selecciona o introduce un importe válido.");
           document
             .getElementById("customAmount")
             .classList.add("field-error");
@@ -710,9 +709,9 @@
         if (donationType === "cuota") {
           // Mapa de valores a texto (en catalán, como el resto del form)
           const periodicityMap = {
-            monthly: "mensuals",
-            quarterly: "trimestrals",
-            annual: "anuals",
+            monthly: "mensuales",
+            quarterly: "trimestrales",
+            annual: "anuales",
           };
 
           // 'periodicity' es una variable global que ya tiene el valor (ej: 'monthly')
@@ -925,7 +924,7 @@
 
     function validateEmailField(field) {
       if (field.value && !isValidEmail(field.value)) {
-        alert("El format del Correu electrònic no és correcte.");
+        alert("El formato del Correo electrónico no es correcto.");
         field.classList.add("field-error");
       } else {
         field.classList.remove("field-error");
@@ -956,12 +955,12 @@
         if (idType === "nif" || idType === "nie" || idType === "") {
           isValid = isValidDNI(value);
           errorMsg =
-            "El format del Núm. de document (NIF/NIE) no és correcte.";
+            "El formato del N.º de documento (NIF/NIE) no es correcto.";
         }
       } else {
         // organizacion
         isValid = isValidCif(value);
-        errorMsg = "El format del Núm. de document (CIF) no és correcte.";
+        errorMsg = "El formato del N.º de documento (CIF) no es correcto.";
       }
 
       // Mostramos el error o limpiamos el campo
@@ -1021,7 +1020,7 @@
 
       const privacyCheckbox = document.getElementById(checkboxId);
       if (!privacyCheckbox.checked) {
-        alert("Has d'acceptar la Política de Privacitat per continuar.");
+        alert("Debes aceptar la Política de Privacidad para continuar.");
         // Marca el label con el error
         privacyCheckbox.parentElement
           .querySelector("label")
@@ -1106,8 +1105,8 @@
 
         if (!value || value.trim() === "") {
           errorMessages.push(
-            `El camp "${element.previousElementSibling?.textContent || fieldId
-            }" és obligatori.`
+            `El campo "${element.previousElementSibling?.textContent || fieldId
+            }" es obligatorio.`
           );
           element.classList.add("field-error");
           if (!firstErrorField) firstErrorField = element;
@@ -1124,7 +1123,7 @@
         const ibanRegex = /^ES\d{22}$/i;
         if (!ibanRegex.test(ibanValue)) {
           errorMessages.push(
-            "El format del compte bancari (IBAN) no és correcte. Ha de ser ES seguit de 22 dígits."
+            "El formato de la cuenta bancaria (IBAN) no es correcto. Debe ser ES seguido de 22 dígitos."
           );
           ibanElement.classList.add("field-error");
           if (!firstErrorField) firstErrorField = ibanElement;
@@ -1151,7 +1150,7 @@
         ) {
           if (!isValidDNI(nifValue)) {
             errorMessages.push(
-              "El format del Núm. de document (NIF/NIE) no és correcte."
+              "El formato del N.º de documento (NIF/NIE) no es correcto."
             );
             nifElement.classList.add("field-error");
             if (!firstErrorField) firstErrorField = nifElement;
@@ -1168,7 +1167,7 @@
         if (cifValue) {
           if (!isValidCif(cifValue)) {
             errorMessages.push(
-              "El format del Núm. de document (CIF) no és correcte."
+              "El formato del N.º de documento (CIF) no es correcto."
             );
             cifElement.classList.add("field-error");
             if (!firstErrorField) firstErrorField = cifElement;
@@ -1184,7 +1183,7 @@
         // Validar solo si el campo tiene valor (el campo obligatorio ya se comprueba arriba)
         if (emailValue && !isValidEmail(emailValue)) {
           errorMessages.push(
-            "El format del Correu electrònic no és correcte."
+            "El formato del Correo electrónico no es correcto."
           );
           emailElement.classList.add("field-error");
           if (!firstErrorField) firstErrorField = emailElement;
@@ -1197,7 +1196,7 @@
         // Validar solo si el campo tiene valor
         if (emailValue && !isValidEmail(emailValue)) {
           errorMessages.push(
-            "El format del Correu electrònic no és correcte."
+            "El formato del Correo electrónico no es correcto."
           );
           emailElement.classList.add("field-error");
           if (!firstErrorField) firstErrorField = emailElement;
@@ -1211,7 +1210,7 @@
         );
         if (!privacyCheckbox.checked) {
           errorMessages.push(
-            "Has d'acceptar la Política de Privacitat per continuar."
+            "Debes aceptar la Política de Privacidad para continuar."
           );
           privacyCheckbox.parentElement
             .querySelector("label")
@@ -1229,7 +1228,7 @@
         );
         if (!privacyCheckbox.checked) {
           errorMessages.push(
-            "Has d'acceptar la Política de Privacitat per continuar."
+            "Debes aceptar la Política de Privacidad para continuar."
           );
           privacyCheckbox.parentElement
             .querySelector("label")
@@ -1246,7 +1245,7 @@
       // 7. Mostrar errores si existen
       if (errorMessages.length > 0) {
         alert(
-          "Si us plau, corregeix els errors següents:\n\n- " +
+          "Por favor, corrige los siguientes errores:\n\n- " +
           errorMessages.join("\n- ")
         );
 
@@ -1284,7 +1283,7 @@
       // Bloquear botón para evitar doble envío
       const submitButton = document.getElementById("submitButton");
       submitButton.disabled = true;
-      submitButton.textContent = "Enviant...";
+      submitButton.textContent = "Enviando...";
 
       // 2. Determinar el caso de uso y obtener configuración
       const useCase = `${personType}_${donationType === "cuota" ? "cuota" : "donativo"
@@ -1501,9 +1500,9 @@
 
       const target = document.getElementById("deductionText");
       if (target) {
-        target.textContent = `Desgrava fins a ${deduction.toFixed(
+        target.textContent = `Desgrava hasta ${deduction.toFixed(
           2
-        )} € a l'any`;
+        )} € al año`;
       }
     }
 
