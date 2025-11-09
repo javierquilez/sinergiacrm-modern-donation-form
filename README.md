@@ -14,7 +14,7 @@ El usuario elige el importe, define si será puntual o periódica, y visualiza u
 **Paso 2. Datos de la persona**  
 Se solicitan los datos identificativos y de contacto necesarios para registrar la donación en el CRM y emitir acreditación fiscal.
 
-![Paso 2](https://tecnologiasolidaria.org/wp-content/uploads/2025/11/form_donacion_2.png)
+![Paso 2](https://tecnologiasolidaria.org/wp-content/uploads/2025/11/form_donacion_2_rgpd.png)
 
 **Paso 3. Método de pago**  
 Se elige entre **tarjeta** o **domiciliación bancaria (IBAN)**. Si se escoge domiciliación, el formulario pide IBAN (validación básica). Tras confirmar, se genera el POST hacia SinergiaCRM.
@@ -89,6 +89,34 @@ El formulario aplica validaciones prácticas antes del envío:
 • **IBAN**: si se elige domiciliación, verifica patrón básico **ES** + 22 dígitos (la comprobación definitiva se hace en servidor).  
 • **Obligatorios**: compone el parámetro `req_id` con los campos requeridos según el caso y añade valores ocultos para campañas, plantillas y relación.
 
+---
+
+## Gestión de RGPD y Campos del CRM
+
+El Paso 2 implementa la lógica de captación de consentimiento RGPD mediante dos casillas de verificación (checkboxes). Esta lógica se aplica de forma diferenciada si el donante es una "Persona física" o una "Empresa".
+
+1.  **Casilla 1: Política de Privacidad (Obligatoria)**
+    * **Comportamiento:** Esta casilla es **obligatoria**. El usuario no puede avanzar al Paso 3 (Pago) si no la marca. La validación se ejecuta al pulsar "Siguiente" y de nuevo en la validación final.
+    * **Datos enviados:** Si se marca, el formulario envía los tres campos base de RGPD al CRM:
+        * `lawful_basis`: "consent"
+        * `date_reviewed`: La fecha actual (formato `YYYY-MM-DD`).
+        * `lawful_basis_source`: "website"
+
+2.  **Casilla 2: Comunicaciones de Marketing (Opcional)**
+    * **Comportamiento:** Es opcional y no bloquea la donación.
+    * **Datos enviados:** Si se marca, envía un `1` a un campo *checkbox* personalizado (ej. `..._stic_gdpr_marketing_c`) que la entidad debe crear.
+
+### Requisitos de Configuración en SinergiaCRM
+
+El formulario está preparado para enviar estos datos, pero SinergiaCRM debe estar configurado para recibirlos correctamente:
+
+* **Para Personas (Módulo `Contacts`):**
+    * **Casilla 1 (Privacidad):** Los 3 campos (`lawful_basis`, `date_reviewed`, `lawful_basis_source`) **son estándar** en el módulo `Contacts` y funcionarán sin configuración adicional.
+    * **Casilla 2 (Marketing):** **Se debe crear un campo personalizado** (ej. un *checkbox*) para recibir esta aceptación.
+
+* **Para Organizaciones (Módulo `Accounts`):**
+    * El módulo `Accounts` no incluye campos RGPD por defecto.
+    * Por lo tanto, **la entidad debe crear manualmente los 4 campos** en el módulo `Accounts` para que la integración sea completa (los 3 campos de base legal + el campo de marketing).
 ---
 
 ## Envío al CRM
