@@ -1,4 +1,4 @@
-# Formulario Moderno Multipaso para SinergiaCRM
+# Formulario Captación Multipaso para SinergiaCRM
 
 Este proyecto proporciona un **frontend multipaso en JavaScript vanilla (sin dependencias)** para captación de fondos con **SinergiaCRM**. Sustituye los webforms nativos del CRM por una única interfaz centrada en la conversión, manteniendo validaciones en cliente y envío **POST** directo al *entryPoint* del CRM.
 
