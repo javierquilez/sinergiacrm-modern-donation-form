@@ -75,6 +75,24 @@ f.action = 'https://mi-entidad.sinergiacrm.org/index.php?entryPoint=stic_Web_For
 
 ---
 
+## Selección de Pasarela de Tarjeta (Stripe vs. Redsys)
+
+Por defecto, SinergiaCRM procesa los pagos con tarjeta usando el identificador genérico `'card'` (asociado habitualmente a Redsys). Si necesitas cambiar la pasarela de cobro a **Stripe**, debes modificar el parámetro que se envía al CRM en el Paso 3 del formulario.
+
+1. **Modificar el HTML (Paso 3):** Localiza el botón de pago con tarjeta y cambia el argumento de la función de `'card'` a `'stripe'`:
+
+```html
+<button onclick="selectPaymentMethod(this, 'card')" type="button">Targeta</button>
+
+<button onclick="selectPaymentMethod(this, 'stripe')" type="button">Targeta</button>
+```
+2. **Actualizar el comentario en JS (Opcional por claridad)**: En la declaración de variables globales en tu script, puedes actualizar la referencia para evitar confusiones futuras:
+
+```html
+let paymentMethod = ""; // 'stripe' o 'direct_debit'
+```
+El script ya está preparado para habilitar la recurrencia en Stripe (allow_stripe_recurring_payments)
+
 ## Estilo y branding
 
 El color de marca está implementado en **CSS**, no en configuración JavaScript. En la cabecera (`<style>`) se usa el color **#c21630** para títulos, botones, indicadores de paso y acentos. Si deseas adaptar tu identidad, **reemplaza #c21630** por tu color corporativo en las reglas CSS pertinentes (`h2`, `.btn`, `.selector-group button.active`, `.step-circle.active`, etc.).
