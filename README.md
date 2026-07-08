@@ -77,7 +77,7 @@ f.action = 'https://mi-entidad.sinergiacrm.org/index.php?entryPoint=stic_Web_For
 
 ## Selección de Pasarela de Tarjeta (Stripe vs. Redsys)
 
-Por defecto, SinergiaCRM procesa los pagos con tarjeta usando el identificador genérico `'card'` (asociado habitualmente a Redsys). Si necesitas cambiar la pasarela de cobro a **Stripe**, debes modificar el parámetro que se envía al CRM en el Paso 3 del formulario.
+Por defecto, se procesan los pagos con tarjeta usando el identificador `'card'` (asociado a Redsys). Si necesitas cambiar la pasarela de cobro a **Stripe**, debes modificar el parámetro que se envía al CRM en el Paso 3 del formulario.
 
 1. **Modificar el HTML (Paso 3):** Localiza el botón de pago con tarjeta y cambia el argumento de la función de `'card'` a `'stripe'`:
 
